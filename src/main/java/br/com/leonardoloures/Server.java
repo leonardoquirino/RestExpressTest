@@ -39,7 +39,7 @@ import com.strategicgains.syntaxe.ValidationException;
 
 public class Server
 {
-	private static final String SERVICE_NAME = "TODO: Enter service name";
+	private static final String SERVICE_NAME = "RestExpressTest";
 	private static final Logger LOG = LoggerFactory.getLogger(SERVICE_NAME);
 
 	private RestExpress server;
