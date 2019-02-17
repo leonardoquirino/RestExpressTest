@@ -54,7 +54,7 @@ public class AccountEntity extends AbstractMongodbEntity implements Linkable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AccountEntity that = (AccountEntity) o;
-        return Objects.equals(nome, that.nome) &&
+        return Objects.equals(this.getId(), that.getId()) && Objects.equals(nome, that.nome) &&
                 Objects.equals(accountType, that.accountType);
     }
 
