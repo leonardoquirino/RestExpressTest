@@ -1,14 +1,11 @@
 package br.com.leonardoloures;
 
-import java.util.Date;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import com.strategicgains.repoexpress.mongodb.MongoConfig;
+import com.strategicgains.restexpress.plugin.metrics.MetricsConfig;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
@@ -18,19 +15,15 @@ import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
 import org.restexpress.RestExpress;
-import br.com.leonardoloures.objectid.SampleOidEntityController;
-import br.com.leonardoloures.objectid.SampleOidEntityRepository;
-import br.com.leonardoloures.objectid.SampleOidEntityService;
-import br.com.leonardoloures.uuid.SampleUuidEntityController;
-import br.com.leonardoloures.uuid.SampleUuidEntityRepository;
-import br.com.leonardoloures.uuid.SampleUuidEntityService;
 import org.restexpress.common.exception.ConfigurationException;
 import org.restexpress.util.Environment;
-
-import com.strategicgains.repoexpress.mongodb.MongoConfig;
-import com.strategicgains.restexpress.plugin.metrics.MetricsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Configuration extends Environment
 {
@@ -46,9 +39,6 @@ public class Configuration extends Environment
 	private String baseUrl;
 	private int executorThreadPoolSize;
 	private MetricsConfig metricsSettings;
-
-	private SampleUuidEntityController sampleUuidController;
-	private SampleOidEntityController sampleOidController;
 
 	@Override
 	protected void fillValues(Properties p)
@@ -70,14 +60,7 @@ public class Configuration extends Environment
         }
         MongoConfig mongo = new MongoConfig(p);
 
-	    //TODO: Remove and create final Repo
-        SampleUuidEntityRepository samplesUuidRepository = new SampleUuidEntityRepository(mongo.getClient(), mongo.getDbName());
-		SampleUuidEntityService sampleUuidService = new SampleUuidEntityService(samplesUuidRepository);
-		sampleUuidController = new SampleUuidEntityController(sampleUuidService);
-
-		SampleOidEntityRepository samplesOidRepository = new SampleOidEntityRepository(mongo.getClient(), mongo.getDbName());
-		SampleOidEntityService sampleOidService = new SampleOidEntityService(samplesOidRepository);
-		sampleOidController = new SampleOidEntityController(sampleOidService);
+	    //TODO: map controllers, services and repos
 	}
 
 	public int getPort()
@@ -99,16 +82,6 @@ public class Configuration extends Environment
     {
 	    return metricsSettings;
     }
-
-	public SampleUuidEntityController getSampleUuidEntityController()
-	{
-		return sampleUuidController;
-	}
-
-	public SampleOidEntityController getSampleOidEntityController()
-	{
-		return sampleOidController;
-	}
 
 	private String getMongoIpFromUri (String uri) {
         if (uri == null) {
