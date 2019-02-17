@@ -7,8 +7,7 @@ public class Constants
 	 */
 	public class Url
 	{
-		//TODO: Your URL parameter names here...
-		public static final String SAMPLE_ID = "uuid";
+		public static final String ACCOUNT_ID = "accountId";
 	}
 
 	/**
@@ -18,9 +17,9 @@ public class Constants
 	public class Routes
 	{
 		//TODO: Your Route names here...
-		public static final String SINGLE_UUID_SAMPLE = "sample.single.route.uuid";
-		public static final String SAMPLE_UUID_COLLECTION = "sample.collection.route.uuid";
-		public static final String SINGLE_OID_SAMPLE = "sample.single.route.oid";
-		public static final String SAMPLE_OID_COLLECTION = "sample.collection.route.oid";
+		public static final String SINGLE_ACCOUNT = "single.route.account";
+		public static final String ACCOUNT_COLLECTION = "collection.route.account";
+		public static final String SINGLE_TRANSACTION = "single.route.transaction";
+		public static final String TRANSACTION_COLLECTION = "collection.route.transaction";
 	}
 }

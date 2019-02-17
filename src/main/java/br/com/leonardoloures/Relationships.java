@@ -1,14 +1,12 @@
 package br.com.leonardoloures;
 
-import java.util.Map;
-
-import org.restexpress.RestExpress;
-import org.restexpress.common.exception.ConfigurationException;
-import br.com.leonardoloures.objectid.SampleOidEntity;
-import br.com.leonardoloures.uuid.SampleUuidEntity;
-
+import br.com.leonardoloures.account.AccountEntity;
 import com.strategicgains.hyperexpress.HyperExpress;
 import com.strategicgains.hyperexpress.RelTypes;
+import org.restexpress.RestExpress;
+import org.restexpress.common.exception.ConfigurationException;
+
+import java.util.Map;
 
 public abstract class Relationships
 {
@@ -19,35 +17,22 @@ public abstract class Relationships
 		ROUTES = server.getRouteUrlsByName();
 
 		HyperExpress.relationships()
-		.forCollectionOf(SampleUuidEntity.class)
-			.rel(RelTypes.SELF, href(Constants.Routes.SAMPLE_UUID_COLLECTION))
+		.forCollectionOf(AccountEntity.class)
+			.rel(RelTypes.SELF, href(Constants.Routes.ACCOUNT_COLLECTION))
 				.withQuery("limit={limit}")
 				.withQuery("offset={offset}")
-			.rel(RelTypes.NEXT, href(Constants.Routes.SAMPLE_UUID_COLLECTION) + "?offset={nextOffset}")
+			.rel(RelTypes.NEXT, href(Constants.Routes.ACCOUNT_COLLECTION) + "?offset={nextOffset}")
 				.withQuery("limit={limit}")
 				.optional()
-			.rel(RelTypes.PREV, href(Constants.Routes.SAMPLE_UUID_COLLECTION) + "?offset={prevOffset}")
-				.withQuery("limit={limit}")
-				.optional()
-
-		.forClass(SampleUuidEntity.class)
-			.rel(RelTypes.SELF, href(Constants.Routes.SINGLE_UUID_SAMPLE))
-			.rel(RelTypes.UP, href(Constants.Routes.SAMPLE_UUID_COLLECTION))
-
-		.forCollectionOf(SampleOidEntity.class)
-			.rel(RelTypes.SELF, href(Constants.Routes.SAMPLE_OID_COLLECTION))
-				.withQuery("limit={limit}")
-				.withQuery("offset={offset}")
-			.rel(RelTypes.NEXT, href(Constants.Routes.SAMPLE_OID_COLLECTION) + "?offset={nextOffset}")
-				.withQuery("limit={limit}")
-				.optional()
-			.rel(RelTypes.PREV, href(Constants.Routes.SAMPLE_OID_COLLECTION) + "?offset={prevOffset}")
+			.rel(RelTypes.PREV, href(Constants.Routes.ACCOUNT_COLLECTION) + "?offset={prevOffset}")
 				.withQuery("limit={limit}")
 				.optional()
 
-		.forClass(SampleOidEntity.class)
-			.rel(RelTypes.SELF, href(Constants.Routes.SINGLE_OID_SAMPLE))
-			.rel(RelTypes.UP, href(Constants.Routes.SAMPLE_OID_COLLECTION));
+		.forClass(AccountEntity.class)
+			.rel(RelTypes.SELF, href(Constants.Routes.SINGLE_ACCOUNT))
+			.rel(RelTypes.UP, href(Constants.Routes.ACCOUNT_COLLECTION));
+
+
 	}
 
 	private static String href(String name)

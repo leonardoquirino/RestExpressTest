@@ -1,5 +1,8 @@
 package br.com.leonardoloures;
 
+import br.com.leonardoloures.account.AccountController;
+import br.com.leonardoloures.account.AccountRepository;
+import br.com.leonardoloures.account.AccountService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -40,6 +43,8 @@ public class Configuration extends Environment
 	private int executorThreadPoolSize;
 	private MetricsConfig metricsSettings;
 
+    private AccountController accountController;
+
 	@Override
 	protected void fillValues(Properties p)
 	{
@@ -61,6 +66,9 @@ public class Configuration extends Environment
         MongoConfig mongo = new MongoConfig(p);
 
 	    //TODO: map controllers, services and repos
+        AccountRepository accountRepository = new AccountRepository(mongo);
+        AccountService accountService = new AccountService(accountRepository);
+        accountController = new AccountController(accountService);
 	}
 
 	public int getPort()
@@ -138,5 +146,9 @@ public class Configuration extends Environment
                 ));
             }
         }
+    }
+
+    public AccountController getAccountController() {
+        return accountController;
     }
 }
