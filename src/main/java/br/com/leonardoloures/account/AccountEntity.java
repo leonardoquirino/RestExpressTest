@@ -5,15 +5,19 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.restexpress.plugin.hyperexpress.Linkable;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
 @Entity("Account")
 public class AccountEntity extends AbstractMongodbEntity implements Linkable {
 
-	private String nome;
-    private BigDecimal balance;
+    private String nome;
+    /*
+     * Changing account balance from BigDecimal to Double because the mongodb (repoexpress) dependency uses an old
+     * Morphia version that saves Double correctly on Mongo, but cannot read it back. This will work as a test,
+     * but for production a Double is not a good representative because of lost precision.
+     */
+    private Double balance;
     private Integer accountType;
     private List<ObjectId> transactions;
 
@@ -25,11 +29,11 @@ public class AccountEntity extends AbstractMongodbEntity implements Linkable {
         this.nome = nome;
     }
 
-    public BigDecimal getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 

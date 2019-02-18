@@ -10,14 +10,12 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.math.BigDecimal;
-
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AccountRepository.class})
 public class AccountServiceTest {
-    
+
     private AccountRepository accountRepository;
     private AccountService accountService;
 
@@ -27,10 +25,10 @@ public class AccountServiceTest {
         accountService = new AccountService(accountRepository);
     }
 
-    private AccountEntity getTestAccount(){
+    private AccountEntity getTestAccount() {
         AccountEntity account = new AccountEntity();
         account.setAccountType(0);
-        account.setBalance(new BigDecimal(500));
+        account.setBalance(new Double(500));
         account.setNome("Foo");
 
         return account;
@@ -70,9 +68,9 @@ public class AccountServiceTest {
         PowerMockito.doReturn(result).when(accountRepository).read(id);
         PowerMockito.doReturn(result).when(accountRepository).update(result);
 
-        result = accountService.subtractBalance(start.getId(), new BigDecimal(100));
+        result = accountService.subtractBalance(start.getId(), new Double(100));
         Assert.assertThat(result.getId(), is(start.getId()));
-        Assert.assertThat(result.getBalance(), is(start.getBalance().subtract(new BigDecimal(100))));
+        Assert.assertThat(result.getBalance(), is(start.getBalance() - 100));
     }
 
     @Test
@@ -85,7 +83,7 @@ public class AccountServiceTest {
         PowerMockito.doReturn(null).when(accountRepository).read(id);
         PowerMockito.doReturn(result).when(accountRepository).update(result);
 
-        result = accountService.subtractBalance(start.getId(), new BigDecimal(100));
+        result = accountService.subtractBalance(start.getId(), new Double(100));
         Assert.assertEquals(null, result);
     }
 
@@ -93,13 +91,15 @@ public class AccountServiceTest {
     public void accountSubtractFailTest() throws UnsupportedOperationException {
         Identifier id = new Identifier(new ObjectId("5c686ead8ea4acb1811105d4"));
         AccountEntity start = getTestAccount();
+        start.setBalance(0.0d);
+        start.setId(id);
         AccountEntity result = getTestAccount();
         result.setId(id);
 
         PowerMockito.doReturn(start).when(accountRepository).read(id);
         PowerMockito.doReturn(result).when(accountRepository).update(result);
 
-        result = accountService.subtractBalance(start.getId(), new BigDecimal(100));
+        result = accountService.subtractBalance(start.getId(), new Double(100));
     }
 
     @Test
@@ -113,9 +113,9 @@ public class AccountServiceTest {
         PowerMockito.doReturn(result).when(accountRepository).read(id);
         PowerMockito.doReturn(result).when(accountRepository).update(result);
 
-        result = accountService.addBalance(start.getId(), new BigDecimal(100));
+        result = accountService.addBalance(start.getId(), new Double(100));
         Assert.assertThat(result.getId(), is(start.getId()));
-        Assert.assertThat(result.getBalance(), is(start.getBalance().add(new BigDecimal(100))));
+        Assert.assertThat(result.getBalance(), is(start.getBalance() + 100));
     }
 
     @Test(expected = IllegalArgumentException.class)

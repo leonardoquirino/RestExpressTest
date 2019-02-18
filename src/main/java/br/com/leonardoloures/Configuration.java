@@ -28,91 +28,85 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Configuration extends Environment
-{
-	private static final String DEFAULT_EXECUTOR_THREAD_POOL_SIZE = "20";
+public class Configuration extends Environment {
+    private static final String DEFAULT_EXECUTOR_THREAD_POOL_SIZE = "20";
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
-	private static final String PORT_PROPERTY = "port";
-	private static final String BASE_URL_PROPERTY = "base.url";
-	private static final String EXECUTOR_THREAD_POOL_SIZE = "executor.threadPool.size";
+    private static final String PORT_PROPERTY = "port";
+    private static final String BASE_URL_PROPERTY = "base.url";
+    private static final String EXECUTOR_THREAD_POOL_SIZE = "executor.threadPool.size";
 
     private static MongodExecutable mongodExecutable;
-	private int port;
-	private String baseUrl;
-	private int executorThreadPoolSize;
-	private MetricsConfig metricsSettings;
+    private int port;
+    private String baseUrl;
+    private int executorThreadPoolSize;
+    private MetricsConfig metricsSettings;
 
     private AccountController accountController;
 
-	@Override
-	protected void fillValues(Properties p)
-	{
-		this.port = Integer.parseInt(p.getProperty(PORT_PROPERTY, String.valueOf(RestExpress.DEFAULT_PORT)));
-		this.baseUrl = p.getProperty(BASE_URL_PROPERTY, "http://localhost:" + String.valueOf(port));
-		this.executorThreadPoolSize = Integer.parseInt(p.getProperty(EXECUTOR_THREAD_POOL_SIZE, DEFAULT_EXECUTOR_THREAD_POOL_SIZE));
-		this.metricsSettings = new MetricsConfig(p);
-		initializeMongo(p);
-	}
+    @Override
+    protected void fillValues(Properties p) {
+        this.port = Integer.parseInt(p.getProperty(PORT_PROPERTY, String.valueOf(RestExpress.DEFAULT_PORT)));
+        this.baseUrl = p.getProperty(BASE_URL_PROPERTY, "http://localhost:" + String.valueOf(port));
+        this.executorThreadPoolSize = Integer.parseInt(p.getProperty(EXECUTOR_THREAD_POOL_SIZE, DEFAULT_EXECUTOR_THREAD_POOL_SIZE));
+        this.metricsSettings = new MetricsConfig(p);
+        initializeMongo(p);
+    }
 
-	private void initializeMongo (Properties p) {
-	    //Start embedded mongo in memory
+    private void initializeMongo(Properties p) {
+        //Start embedded mongo in memory
         String env = p.getProperty("mongo.env");
         String uri = p.getProperty("mongodb.uri");
 
-	    if (env != null || !env.equals("prod")){
+        if (env != null || !env.equals("prod")) {
             startEmbeddedMongoDB(uri);
         }
         MongoConfig mongo = new MongoConfig(p);
 
-	    //TODO: map controllers, services and repos
+        //TODO: map controllers, services and repos
         AccountRepository accountRepository = new AccountRepository(mongo);
         AccountService accountService = new AccountService(accountRepository);
         accountController = new AccountController(accountService);
-	}
-
-	public int getPort()
-	{
-		return port;
-	}
-	
-	public String getBaseUrl()
-	{
-		return baseUrl;
-	}
-	
-	public int getExecutorThreadPoolSize()
-	{
-		return executorThreadPoolSize;
-	}
-
-	public MetricsConfig getMetricsConfig()
-    {
-	    return metricsSettings;
     }
 
-	private String getMongoIpFromUri (String uri) {
+    public int getPort() {
+        return port;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public int getExecutorThreadPoolSize() {
+        return executorThreadPoolSize;
+    }
+
+    public MetricsConfig getMetricsConfig() {
+        return metricsSettings;
+    }
+
+    private String getMongoIpFromUri(String uri) {
         if (uri == null) {
             throw new ConfigurationException("Please define a MongoDB URI for property: mongodb.uri");
         }
-        int startIndex = uri.indexOf("//")+2;
+        int startIndex = uri.indexOf("//") + 2;
         return uri.substring(startIndex, uri.indexOf(":", startIndex));
     }
 
-    private Integer getMongoPortFromUri (String uri) {
+    private Integer getMongoPortFromUri(String uri) {
         if (uri == null) {
             throw new ConfigurationException("Please define a MongoDB URI for property: mongodb.uri");
         }
         Pattern pattern = Pattern.compile(":([0-9]+)");
         Matcher matcher = pattern.matcher(uri);
-        if (! matcher.find()){
+        if (!matcher.find()) {
             throw new ConfigurationException("MongoDB URI Bad Formatting");
         }
 
         return Integer.valueOf(matcher.group(1));
     }
 
-    private void startEmbeddedMongoDB(String uri){
+    private void startEmbeddedMongoDB(String uri) {
         MongodStarter mongodStarter = MongodStarter.getDefaultInstance();
         String bindIp = this.getMongoIpFromUri(uri);
         Integer port = this.getMongoPortFromUri(uri);
@@ -132,10 +126,10 @@ public class Configuration extends Environment
             DBCollection col = db.createCollection("testCol", new BasicDBObject());
             col.save(new BasicDBObject("testDoc", new Date()));
             db.dropDatabase();
-        } catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Error starting Embedded MongoDB " + e);
         } finally {
-            if (mongodExecutable != null){
+            if (mongodExecutable != null) {
                 Runtime.getRuntime().addShutdownHook(new Thread(
                         new Runnable() {
                             public void run() {

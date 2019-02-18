@@ -7,6 +7,7 @@ import com.strategicgains.hyperexpress.builder.UrlBuilder;
 import com.strategicgains.repoexpress.domain.Identifier;
 import com.strategicgains.syntaxe.ValidationEngine;
 import io.netty.handler.codec.http.HttpMethod;
+import org.bson.types.ObjectId;
 import org.restexpress.Request;
 import org.restexpress.Response;
 import org.restexpress.common.query.QueryFilter;
@@ -18,8 +19,6 @@ import org.restexpress.query.QueryRanges;
 
 import java.util.List;
 
-import static com.strategicgains.repoexpress.adapter.Identifiers.UUID;
-
 public class AccountController {
     private static final UrlBuilder LOCATION_BUILDER = new DefaultUrlBuilder();
     private AccountService accountService;
@@ -29,7 +28,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    public AccountEntity create(Request request, Response response) 	{
+    public AccountEntity create(Request request, Response response) {
         AccountEntity entity = request.getBodyAs(AccountEntity.class, "Resource details not provided");
         AccountEntity saved = accountService.create(entity);
 
@@ -42,16 +41,14 @@ public class AccountController {
         return saved;
     }
 
-    public AccountEntity read(Request request, Response response)
-    {
+    public AccountEntity read(Request request, Response response) {
         String id = request.getHeader(Constants.Url.ACCOUNT_ID, "No Account ID supplied");
-        Identifier identifier = new Identifier(id);
+        Identifier identifier = new Identifier(new ObjectId(id));
         AccountEntity accountEntity = accountService.read(identifier);
         return accountEntity;
     }
 
-    public List<AccountEntity> readAll(Request request, Response response)
-    {
+    public List<AccountEntity> readAll(Request request, Response response) {
         QueryFilter filter = QueryFilters.parseFrom(request);
         QueryOrder order = QueryOrders.parseFrom(request);
         QueryRange range = QueryRanges.parseFrom(request, 20);
@@ -61,8 +58,7 @@ public class AccountController {
         return entities;
     }
 
-    public void update(Request request, Response response)
-    {
+    public void update(Request request, Response response) {
         String id = request.getHeader(Constants.Url.ACCOUNT_ID);
         AccountEntity accountEntity = request.getBodyAs(AccountEntity.class, "Account details not provided");
 
@@ -74,8 +70,7 @@ public class AccountController {
         response.setResponseNoContent();
     }
 
-    public void delete(Request request, Response response)
-    {
+    public void delete(Request request, Response response) {
         String id = request.getHeader(Constants.Url.ACCOUNT_ID, "No Blog ID supplied");
         accountService.delete(new Identifier(id));
         response.setResponseNoContent();

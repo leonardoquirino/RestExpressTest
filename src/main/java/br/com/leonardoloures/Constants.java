@@ -8,6 +8,7 @@ public class Constants
 	public class Url
 	{
 		public static final String ACCOUNT_ID = "accountId";
+        public static final String ACCOUNT = "account";
 	}
 
 	/**
@@ -17,8 +18,8 @@ public class Constants
 	public class Routes
 	{
 		//TODO: Your Route names here...
-		public static final String SINGLE_ACCOUNT = "single.route.account";
-		public static final String ACCOUNT_COLLECTION = "collection.route.account";
+		public static final String SINGLE_ACCOUNT = "account.single.route.oid";
+		public static final String ACCOUNT_COLLECTION = "account.collection.route.oid";
 		public static final String SINGLE_TRANSACTION = "single.route.transaction";
 		public static final String TRANSACTION_COLLECTION = "collection.route.transaction";
 	}

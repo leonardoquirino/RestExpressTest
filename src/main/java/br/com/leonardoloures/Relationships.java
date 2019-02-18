@@ -30,7 +30,7 @@ public abstract class Relationships
 
 		.forClass(AccountEntity.class)
 			.rel(RelTypes.SELF, href(Constants.Routes.SINGLE_ACCOUNT))
-			.rel(RelTypes.UP, href(Constants.Routes.ACCOUNT_COLLECTION));
+			.rel(RelTypes.UP, href(Constants.Routes.SINGLE_ACCOUNT));
 
 
 	}

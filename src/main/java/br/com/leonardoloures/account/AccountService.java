@@ -39,36 +39,36 @@ public class AccountService {
         return accountRepository.update(entity);
     }
 
-    public AccountEntity subtractBalance (Identifier id, BigDecimal amount) throws UnsupportedOperationException {
+    public AccountEntity subtractBalance (Identifier id, Double amount) throws UnsupportedOperationException {
         AccountEntity accountEntity = accountRepository.read(id);
         if (accountEntity == null){
             return null;
         }
 
-        if (accountEntity.getBalance().equals(new BigDecimal(0)) ||
-                accountEntity.getBalance().compareTo(amount) < 0) {
+        if (accountEntity.getBalance().equals(0.0) ||
+                accountEntity.getBalance() < amount) {
             throw new UnsupportedOperationException(
                     "The account does not have the balance to complete this operation.");
         }
-        accountEntity.setBalance(accountEntity.getBalance().subtract(amount));
+        accountEntity.setBalance(accountEntity.getBalance() - amount);
         accountEntity = accountRepository.update(accountEntity);
         return accountEntity;
     }
 
-    public AccountEntity addBalance (Identifier id, BigDecimal amount) {
+    public AccountEntity addBalance (Identifier id, Double amount) {
         AccountEntity accountEntity = accountRepository.read(id);
         if (accountEntity == null){
             return accountEntity;
         }
 
-        accountEntity.setBalance(accountEntity.getBalance().add(amount));
+        accountEntity.setBalance(accountEntity.getBalance() + (amount));
         accountEntity = accountRepository.update(accountEntity);
         return accountEntity;
     }
 
     public void delete(Identifier id) throws UnsupportedOperationException {
         AccountEntity accountEntity = accountRepository.read(id);
-        if (accountEntity.getBalance().compareTo(new BigDecimal(0)) > 0) {
+        if (accountEntity.getBalance().compareTo(new Double(0)) > 0) {
             throw new UnsupportedOperationException("The account has values to be withdrawn.");
         }
         accountRepository.delete(accountEntity);
