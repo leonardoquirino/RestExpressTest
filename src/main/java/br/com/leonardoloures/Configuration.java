@@ -3,6 +3,9 @@ package br.com.leonardoloures;
 import br.com.leonardoloures.account.AccountController;
 import br.com.leonardoloures.account.AccountRepository;
 import br.com.leonardoloures.account.AccountService;
+import br.com.leonardoloures.transactions.TransactionController;
+import br.com.leonardoloures.transactions.TransactionRepository;
+import br.com.leonardoloures.transactions.TransactionService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -43,6 +46,7 @@ public class Configuration extends Environment {
     private MetricsConfig metricsSettings;
 
     private AccountController accountController;
+    private TransactionController transactionController;
 
     @Override
     protected void fillValues(Properties p) {
@@ -67,6 +71,10 @@ public class Configuration extends Environment {
         AccountRepository accountRepository = new AccountRepository(mongo);
         AccountService accountService = new AccountService(accountRepository);
         accountController = new AccountController(accountService);
+
+        TransactionRepository transactionRepository = new TransactionRepository(mongo);
+        TransactionService transactionService = new TransactionService(transactionRepository, accountService);
+        transactionController = new TransactionController(transactionService);
     }
 
     public int getPort() {
@@ -144,5 +152,9 @@ public class Configuration extends Environment {
 
     public AccountController getAccountController() {
         return accountController;
+    }
+
+    public TransactionController getTransactionController() {
+        return transactionController;
     }
 }

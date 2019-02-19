@@ -17,6 +17,10 @@ public abstract class Routes {
                 .method(HttpMethod.POST)
                 .name(Constants.Routes.ACCOUNT_COLLECTION);
 
+        server.uri(Constants.Url.PENDING_TRANSACTION,
+                config.getAccountController())
+                .method(HttpMethod.GET)
+                .name(Constants.Routes.SINGLE_TRANSACTION);
         // or REGEX matching routes...
         // server.regex("/some.regex", config.getRouteController());
     }

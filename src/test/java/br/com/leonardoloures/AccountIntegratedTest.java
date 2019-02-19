@@ -43,8 +43,9 @@ public class AccountIntegratedTest {
     }
 
     @Test
-    public void getAccountRequest() throws IOException {
-        given().when().get(BASE_URL + "/" + Constants.Url.ACCOUNT + "/5c6a034e2682593728028e75").then().statusCode(HttpStatus.SC_NOT_FOUND);
+    public void getAccountRequestFail() throws IOException {
+        given().when().get(BASE_URL + "/" + Constants.Url.ACCOUNT + "/5c6a034e2682593728028e75")
+                .then().statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
     @Test
