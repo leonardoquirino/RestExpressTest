@@ -6,7 +6,6 @@ import org.restexpress.common.query.QueryFilter;
 import org.restexpress.common.query.QueryOrder;
 import org.restexpress.common.query.QueryRange;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -31,17 +30,17 @@ public class AccountService {
         return accountRepository.read(id);
     }
 
-    public AccountEntity update (AccountEntity entity) throws IllegalArgumentException{
+    public AccountEntity update(AccountEntity entity) throws IllegalArgumentException {
         ValidationEngine.validateAndThrow(entity);
-        if (entity.getId() == null){
+        if (entity.getId() == null) {
             throw new IllegalArgumentException("Entity does not contain ID");
         }
         return accountRepository.update(entity);
     }
 
-    public AccountEntity subtractBalance (Identifier id, Double amount) throws UnsupportedOperationException {
+    public AccountEntity subtractBalance(Identifier id, Double amount, Identifier transactionId) throws UnsupportedOperationException {
         AccountEntity accountEntity = accountRepository.read(id);
-        if (accountEntity == null){
+        if (accountEntity == null) {
             return null;
         }
 
@@ -50,18 +49,20 @@ public class AccountService {
             throw new UnsupportedOperationException(
                     "The account does not have the balance to complete this operation.");
         }
-        accountEntity.setBalance(accountEntity.getBalance() - amount);
+        accountEntity.addBalance( - amount);
+        accountEntity.getTransactions().add(transactionId);
         accountEntity = accountRepository.update(accountEntity);
         return accountEntity;
     }
 
-    public AccountEntity addBalance (Identifier id, Double amount) {
+    public AccountEntity addBalance(Identifier id, Double amount, Identifier transactionId) {
         AccountEntity accountEntity = accountRepository.read(id);
-        if (accountEntity == null){
+        if (accountEntity == null) {
             return accountEntity;
         }
 
-        accountEntity.setBalance(accountEntity.getBalance() + (amount));
+        accountEntity.getTransactions().add(transactionId);
+        accountEntity.addBalance(amount);
         accountEntity = accountRepository.update(accountEntity);
         return accountEntity;
     }

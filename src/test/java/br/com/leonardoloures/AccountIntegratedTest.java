@@ -52,7 +52,7 @@ public class AccountIntegratedTest {
 
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setNome("Foo");
-        accountEntity.setBalance(new Double(500));
+        accountEntity.addBalance(new Double(500));
         accountEntity.setAccountType(0);
         given().body(accountEntity)
                 .when().post(BASE_URL + "/account")

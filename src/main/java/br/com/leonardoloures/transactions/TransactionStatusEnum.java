@@ -3,7 +3,7 @@ package br.com.leonardoloures.transactions;
 public enum TransactionStatusEnum {
 
     // Constants -----------------------------------------------------
-    INITIAL(0, "Initial"), PENDING(1, "pending"), APPLIED(2, "applied");
+    INITIAL(0, "Initial"), PENDING(1, "pending"), APPLIED(2, "Applied"), DONE(3, "Done"), FAILED(4, "Failed");
 
     // Attributes ----------------------------------------------------
     private int type;

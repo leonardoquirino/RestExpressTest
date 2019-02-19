@@ -1,5 +1,6 @@
 package br.com.leonardoloures.transactions;
 
+import com.strategicgains.repoexpress.domain.Identifier;
 import com.strategicgains.repoexpress.mongodb.AbstractMongodbEntity;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -12,10 +13,10 @@ import java.util.Objects;
 @Entity("Account")
 public class TransactionEntity extends AbstractMongodbEntity implements Linkable {
 
-	private ObjectId source;
-    private ObjectId destination;
+    private Identifier source;
+    private Identifier destination;
 
-    private BigDecimal value;
+    private Double value;
     private TransactionStatusEnum status;
 
     @Override
@@ -33,27 +34,27 @@ public class TransactionEntity extends AbstractMongodbEntity implements Linkable
         return Objects.hash(source, destination, value);
     }
 
-    public ObjectId getSource() {
+    public Identifier getSource() {
         return source;
     }
 
-    public void setSource(ObjectId source) {
+    public void setSource(Identifier source) {
         this.source = source;
     }
 
-    public ObjectId getDestination() {
+    public Identifier getDestination() {
         return destination;
     }
 
-    public void setDestination(ObjectId destination) {
+    public void setDestination(Identifier destination) {
         this.destination = destination;
     }
 
-    public BigDecimal getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(BigDecimal value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
@@ -64,4 +65,6 @@ public class TransactionEntity extends AbstractMongodbEntity implements Linkable
     public void setStatus(TransactionStatusEnum status) {
         this.status = status;
     }
+
+
 }

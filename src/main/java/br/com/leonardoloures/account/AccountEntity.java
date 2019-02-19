@@ -1,10 +1,11 @@
 package br.com.leonardoloures.account;
 
+import com.strategicgains.repoexpress.domain.Identifier;
 import com.strategicgains.repoexpress.mongodb.AbstractMongodbEntity;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.restexpress.plugin.hyperexpress.Linkable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,9 +18,9 @@ public class AccountEntity extends AbstractMongodbEntity implements Linkable {
      * Morphia version that saves Double correctly on Mongo, but cannot read it back. This will work as a test,
      * but for production a Double is not a good representative because of lost precision.
      */
-    private Double balance;
+    private Double balance = 0d;
     private Integer accountType;
-    private List<ObjectId> transactions;
+    private List<Identifier> transactions;
 
     public String getNome() {
         return nome;
@@ -33,8 +34,8 @@ public class AccountEntity extends AbstractMongodbEntity implements Linkable {
         return balance;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
+    public void addBalance(Double balance) {
+        this.balance += balance;
     }
 
     public Integer getAccountType() {
@@ -45,11 +46,15 @@ public class AccountEntity extends AbstractMongodbEntity implements Linkable {
         this.accountType = accountType;
     }
 
-    public List<ObjectId> getTransactions() {
+    public List<Identifier> getTransactions() {
+        if (transactions == null) {
+            transactions = new ArrayList<>();
+        }
+
         return transactions;
     }
 
-    public void setTransactions(List<ObjectId> transactions) {
+    public void setTransactions(List<Identifier> transactions) {
         this.transactions = transactions;
     }
 
