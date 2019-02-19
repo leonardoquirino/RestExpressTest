@@ -1,6 +1,10 @@
 package br.com.leonardoloures;
 
 import br.com.leonardoloures.account.AccountEntity;
+import br.com.leonardoloures.transactions.TransactionDTO;
+import br.com.leonardoloures.transactions.TransactionStatusEnum;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -50,30 +54,58 @@ public class TransactionIntegratedTest {
 
     @Test
     public void getPendingTransactionRequest() throws IOException {
+        Response response;
+
         AccountEntity source = new AccountEntity();
         source.setNome("Source");
         source.addBalance(new Double(500));
         source.setAccountType(0);
-        given().body(source)
+        response = given().body(source)
                 .when().post(BASE_URL + "/account")
-                .then().statusCode(HttpStatus.SC_CREATED)
-                .and().assertThat()
-                .body("balance", equalTo(source.getBalance().floatValue()))
-                .body("nome", equalTo(source.getNome()));
+                .then().contentType(ContentType.JSON).extract().response();
+        String sourceId = response.path("id");
 
         AccountEntity destination = new AccountEntity();
         destination.setNome("Destination");
         destination.addBalance(new Double(500));
         destination.setAccountType(0);
-        given().body(destination)
+        response = given().body(destination)
                 .when().post(BASE_URL + "/account")
-                .then().statusCode(HttpStatus.SC_CREATED)
-                .and().assertThat()
-                .body("balance", equalTo(destination.getBalance().floatValue()))
-                .body("nome", equalTo(destination.getNome()));
+                .then().contentType(ContentType.JSON).extract().response();
 
-        given().when().get(BASE_URL + "/" + Constants.Url.PENDING_TRANSACTION + "/5c6a034e2682593728028e75")
-                .then().statusCode(HttpStatus.SC_NOT_FOUND);
+        String destId = response.path("id");
+
+        TransactionDTO transaction = new TransactionDTO();
+        transaction.setSource(sourceId);
+        transaction.setDestination(destId);
+        transaction.setValue(100.0d);
+        response = given().body(transaction)
+                .when().post(BASE_URL + "/transaction")
+                .then().contentType(ContentType.JSON).extract().response();
+
+        transaction.setId(response.path("id"));
+
+        given().when().get(BASE_URL + "/" + Constants.Url.INITIAL_TRANSACTION)
+                .then().statusCode(HttpStatus.SC_OK)
+                .and().assertThat()
+                .body("value", equalTo(transaction.getValue().floatValue()))
+                .body("status", equalTo(TransactionStatusEnum.INITIAL.name()));
+
+        given().when().get(BASE_URL + "/" + Constants.Url.TRANSACTION + "/" + transaction.getId())
+                .then().statusCode(HttpStatus.SC_OK)
+                .and().assertThat()
+                .body("status", equalTo(TransactionStatusEnum.DONE.name()));
+
+
+        given().when().get(BASE_URL + "/" + Constants.Url.ACCOUNT + "/" + sourceId)
+                .then().statusCode(HttpStatus.SC_OK)
+                .and().assertThat()
+                .body("balance", equalTo( new Float(source.getBalance() - transaction.getValue())));
+
+        given().when().get(BASE_URL + "/" + Constants.Url.ACCOUNT + "/" + destId)
+                .then().statusCode(HttpStatus.SC_OK)
+                .and().assertThat()
+                .body("balance", equalTo( new Float (source.getBalance() + transaction.getValue())));
     }
 
 }

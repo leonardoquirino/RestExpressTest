@@ -8,7 +8,10 @@ public class Constants {
         public static final String ACCOUNT_ID = "accountId";
         public static final String ACCOUNT = "account";
 
+        public static final String TRANSACTION_ID = "transactionId";
         public static final String PENDING_TRANSACTION = "transaction/pending";
+        public static final String INITIAL_TRANSACTION = "transaction/initial";
+        public static final String TRANSACTION = "transaction";
     }
 
     /**
@@ -20,6 +23,5 @@ public class Constants {
         public static final String SINGLE_ACCOUNT = "account.single.route.oid";
         public static final String ACCOUNT_COLLECTION = "account.collection.route.oid";
         public static final String SINGLE_TRANSACTION = "transaction.single.route.oid";
-        public static final String TRANSACTION_COLLECTION = "transaction.collection.route.oid";
     }
 }

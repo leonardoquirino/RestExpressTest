@@ -73,7 +73,7 @@ public class TransactionService {
         return transactionRepository.update(entity);
     }
 
-    public TransactionEntity readLastTransactionByStatus(TransactionStatusEnum status) {
+    public TransactionEntity readOldestTransactionByStatus(TransactionStatusEnum status) {
         QueryFilter filter = new QueryFilter();
         filter.addCriteria("status", FilterOperator.EQUALS, status);
         QueryOrder order = new QueryOrder();

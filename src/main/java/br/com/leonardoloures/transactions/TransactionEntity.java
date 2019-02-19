@@ -66,5 +66,17 @@ public class TransactionEntity extends AbstractMongodbEntity implements Linkable
         this.status = status;
     }
 
-
+    public static TransactionEntity fromDTO(TransactionDTO dto){
+        TransactionEntity entity = new TransactionEntity();
+        if (dto.getId() != null) {
+            entity.setId(new Identifier(new ObjectId(dto.getId())));
+        }
+        entity.setSource(new Identifier(new ObjectId(dto.getSource())));
+        entity.setDestination(new Identifier(new ObjectId(dto.getDestination())));
+        entity.setValue(dto.getValue());
+        if (dto.getStatus() != null){
+            entity.setStatus(TransactionStatusEnum.fromValue(dto.getStatus().getType()));
+        }
+        return entity;
+    }
 }

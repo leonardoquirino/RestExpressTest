@@ -12,14 +12,32 @@ public abstract class Routes {
                 .method(HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE)
                 .name(Constants.Routes.SINGLE_ACCOUNT);
 
-        server.uri(Constants.Url.ACCOUNT , config.getAccountController())
+        server.uri(Constants.Url.ACCOUNT,
+                config.getAccountController())
                 .action("readAll", HttpMethod.GET)
                 .method(HttpMethod.POST)
                 .name(Constants.Routes.ACCOUNT_COLLECTION);
 
-        server.uri(Constants.Url.PENDING_TRANSACTION,
-                config.getAccountController())
+        server.uri(Constants.Url.INITIAL_TRANSACTION,
+                config.getTransactionController())
+                .action("readInitial", HttpMethod.GET)
+                .method(HttpMethod.POST)
+                .name(Constants.Routes.SINGLE_TRANSACTION);
+
+        server.uri(Constants.Url.TRANSACTION + "/{" + Constants.Url.TRANSACTION_ID + "}",
+                config.getTransactionController())
+                .action("readTransactionResult", HttpMethod.GET)
+                .method(HttpMethod.POST)
+                .name(Constants.Routes.SINGLE_TRANSACTION);
+
+        server.uri(Constants.Url.TRANSACTION + "/{" + Constants.Url.ACCOUNT_ID + "}",
+                config.getTransactionController())
                 .method(HttpMethod.GET)
+                .name(Constants.Routes.SINGLE_TRANSACTION);
+
+        server.uri(Constants.Url.TRANSACTION,
+                config.getTransactionController())
+                .method(HttpMethod.POST)
                 .name(Constants.Routes.SINGLE_TRANSACTION);
         // or REGEX matching routes...
         // server.regex("/some.regex", config.getRouteController());

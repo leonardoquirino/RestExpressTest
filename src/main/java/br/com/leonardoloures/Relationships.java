@@ -28,22 +28,10 @@ public abstract class Relationships
 			.rel(RelTypes.PREV, href(Constants.Routes.ACCOUNT_COLLECTION) + "?offset={prevOffset}")
 				.withQuery("limit={limit}")
 				.optional()
-		.forCollectionOf(TransactionEntity.class)
-				.rel(RelTypes.SELF, href(Constants.Routes.ACCOUNT_COLLECTION))
-				.withQuery("limit={limit}")
-				.withQuery("offset={offset}")
-				.rel(RelTypes.NEXT, href(Constants.Routes.ACCOUNT_COLLECTION) + "?offset={nextOffset}")
-				.withQuery("limit={limit}")
-				.optional()
-				.rel(RelTypes.PREV, href(Constants.Routes.ACCOUNT_COLLECTION) + "?offset={prevOffset}")
-				.withQuery("limit={limit}")
-				.optional()
 		.forClass(AccountEntity.class)
 			.rel(RelTypes.SELF, href(Constants.Routes.SINGLE_ACCOUNT))
-			.rel(RelTypes.UP, href(Constants.Routes.SINGLE_ACCOUNT))
 		.forClass(TransactionEntity.class)
-			.rel(RelTypes.SELF, href(Constants.Routes.SINGLE_ACCOUNT))
-			.rel(RelTypes.UP, href(Constants.Routes.SINGLE_ACCOUNT));
+			.rel(RelTypes.SELF, href(Constants.Routes.SINGLE_ACCOUNT));
 
 	}
 

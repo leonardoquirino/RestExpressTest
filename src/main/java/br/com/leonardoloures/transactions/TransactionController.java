@@ -28,7 +28,8 @@ public class TransactionController {
     }
 
     public TransactionEntity create(Request request, Response response) {
-        TransactionEntity entity = request.getBodyAs(TransactionEntity.class, "Resource details not provided");
+        TransactionDTO transactionDTO = request.getBodyAs(TransactionDTO.class, "Resource details not provided");
+        TransactionEntity entity = TransactionEntity.fromDTO(transactionDTO);
         TransactionEntity saved = transactionService.create(entity);
 
         // Construct the response for create...
@@ -44,6 +45,20 @@ public class TransactionController {
         String id = request.getHeader(Constants.Url.ACCOUNT_ID, "No Account ID supplied");
         Identifier identifier = new Identifier(new ObjectId(id));
         TransactionEntity transactionEntity = transactionService.read(identifier);
+        return transactionEntity;
+    }
+
+    public TransactionEntity readInitial(Request request, Response response) {
+
+        TransactionEntity transactionEntity = transactionService.readOldestTransactionByStatus(TransactionStatusEnum.INITIAL);
+        return transactionEntity;
+    }
+
+    public TransactionEntity readTransactionResult(Request request, Response response) {
+        String id = request.getHeader(Constants.Url.TRANSACTION_ID, "No Account ID supplied");
+        Identifier identifier = new Identifier(new ObjectId(id));
+        TransactionEntity transactionEntity = transactionService.read(identifier);
+        transactionEntity = transactionService.transfer(transactionEntity);
         return transactionEntity;
     }
 
