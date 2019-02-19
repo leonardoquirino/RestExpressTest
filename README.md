@@ -1,9 +1,9 @@
-Revolut Backend Test - Leonardo Loures
+Backend Test - Leonardo Loures
 ===================================
 After researching for a lightweight framework that would be useful for this test, I choose to go with RestExpress. 
 I had already read about it some time ago, but when I got back to it, I saw that it was a atempt to replicate the Express framework from Node.js and the MEAN stack using Netty/Java NIO.
 
-This framework is simple, but still rough, and the MongoDB stack is way behind schedule. 
+This framework is simple, but still rough, and the MongoDB stack is way behind schedule, wich led to having to resort to Two Phase Commit. 
 Maybe I should've went with Vert.x.  
 
 To run the project:
